@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Entities\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EfectiveLogging.Domain\EfectiveLogging.Domain.csproj" />
+    <ProjectReference Include="..\EfectiveLogging.Infrastruture\EfectiveLogging.Infrastruture.csproj" />
+    <ProjectReference Include="..\EffectiveLogging.Logs\EffectiveLogging.Extensions.csproj" />
+  </ItemGroup>
+
+
+</Project>

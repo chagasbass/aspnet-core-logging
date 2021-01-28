@@ -1,0 +1,58 @@
+CONFIGURAÇÃO DE LOG
+
+"Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information",
+    }
+
+    OU
+"Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.AspnetCore": "Information",
+    }
+
+------------------------------------------------------------------------------------------------
+    PACOTES DO SERILOG
+
+    serilog.aspnetcore
+    serilog.settings.configuration
+    serilog.sinksFile
+
+------------------------------------------------------------------------------------------------
+    app settings do serilog
+     "Serilog": {
+    "MinimumLevel": {
+      "Default": "Debug",
+      "Override": {
+        "Microsoft": "Information",
+        "System": "Warning"
+      }
+    }
+
+ ------------------------------------------------------------------------------------------------
+ LOG LEVELS
+
+ Trace/Verbose -> nível mínimo de log
+ Debug ->  nível médio e configuravel
+ Information -> nível  do fluxo geral da aplicação.
+ Warning -> Indicado para mostrar problemas na aplicação (valores inesperados ou exceptions que não estamos lidando consientemente)
+ Error -> Exceptions não tratadas
+ Critical/Fatal -> Exceptions não tratadas mas que são tipadas( erro de banco ou transação)
+ ------------------------------------------------------------------------------------------------
+ ANATOMIA DE UM LOG DE ENTRADA
+
+ Timestamp - hora do log - 28/01/2021 15:27:33:00
+ Level - Nível do log - Information
+ Message template - Dados - {UserID} executou {ActicivityName}
+ Message - mensagem da ação - usuario excluiu livro
+ SourceContext - Categoria do log - MInhaApi.APi.COntroller.BookController
+ ActionId - Identificador de ação - GUID
+ ActionName - Caminho do namespace ate a classe e metodo - MInhaApi.APi.COntroller.BookController.Get(Book book)
+ RequestId - identificador do request - GUID
+ RequestPath - caminho da requisicao - /api/book
+ CorrelationId - sessionId para correlacionar com um usuario
+ Exeption - mensagem gerada
