@@ -14,7 +14,8 @@ namespace EffectiveLogging.Middlewares.Middlewares
             return builder.UseMiddleware<ApiExceptionMiddleware>(options);
         }
 
-        public static IApplicationBuilder UseApiExceptionHandler(this IApplicationBuilder builder, Action<ApiExceptionOptions> configureOptions)
+        public static IApplicationBuilder UseApiExceptionHandler(this IApplicationBuilder builder,
+            Action<ApiExceptionOptions> configureOptions)
         {
             var options = new ApiExceptionOptions();
             configureOptions(options);

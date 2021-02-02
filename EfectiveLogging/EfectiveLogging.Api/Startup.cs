@@ -32,8 +32,6 @@ namespace EfectiveLogging.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            //loggerFactory.AddSerilog();
-
             app.UseApiExceptionHandler(options =>
             {
                 options.AddResponseDetails = ApiErrorResponseExtension.UpdateApiErrorResponse;
@@ -50,10 +48,6 @@ namespace EfectiveLogging.Api
             {
                 endpoints.MapControllers();
             });
-
-            //app.ErrorHandlerMiddleware();
-            //app.UseMiddleware<SerilogMiddleware>();
-            //app.UseMiddleware<ErrorHandlerMiddleware>(loggerFactory);
         }
     }
 }

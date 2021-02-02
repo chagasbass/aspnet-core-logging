@@ -21,8 +21,15 @@ namespace EfectiveLogging.Api
             ///configuração da escrita de log em arquivos
             Log.Logger = new LoggerConfiguration()
                  .ReadFrom.Configuration(Configuration)
-                 .WriteTo.File(new JsonFormatter(), @"c:\devs\log-app.json", shared: true)
+                 //.WriteTo.File(new JsonFormatter(), @"c:\devs\log-app.json", shared: true)
+                 .WriteTo.Seq("http://localhost:5341")
                  .CreateLogger();
+
+            #region nlog
+
+            //Log.Logger = NLogBuilder.ConfigureNlog("nlog.config").GetCurrentClassLogger();
+
+            #endregion
             try
             {
                 Log.Information(messageTemplate: "Inializando novo Host");
@@ -35,6 +42,9 @@ namespace EfectiveLogging.Api
             finally
             {
                 Log.CloseAndFlush();
+
+                //nlog
+                //Nlog.LogManager.ShutDown();
             }
         }
 
@@ -44,6 +54,8 @@ namespace EfectiveLogging.Api
                 {
                     webBuilder.UseStartup<Startup>()
                     .UseSerilog();
+                    //.UseNLog();
                 });
+
     }
 }

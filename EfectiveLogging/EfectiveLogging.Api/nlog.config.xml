@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<nlog xmlns="http://www.nlog-project.org/schemas/NLog.xsd"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      autoReload="true"
+      internalLogLevel="Warn"
+      internalLogFile="c:\temp\internal-nlog-ui.txt">
+
+  <extensions>
+    <add assembly="Nlog.Web.AspnetCore"/>
+    <add assembly="Nlog.Targets.ElasticSearch"/>
+  </extensions>
+
+  <targets>
+    <target name="elastic" xsi:type="BufferingWrapper" flushTimeout ="5000">
+      <target xsi:type="ElasticSearch" uri ="http://localhost:9200"
+              index="minhaApp-${date:format=dd.MM.yyyy}" includeAllProperties="true">
+        <field name="mdlc" layoutType="System.Object">
+          <layout xsi:type="JsonLayout" includeMdlc="true"/>
+        </field>
+      </target>
+    </target>
+  </targets>
+
+  <rules>
+    <logger name="*" minLevel="Info" writeTo="elastic"/>
+  </rules>
+
+</nlog>

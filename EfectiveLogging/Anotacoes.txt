@@ -56,3 +56,107 @@ CONFIGURAÇÃO DE LOG
  RequestPath - caminho da requisicao - /api/book
  CorrelationId - sessionId para correlacionar com um usuario
  Exeption - mensagem gerada
+
+ ----------------------------------------------------------------------------------------------------
+ TIPOS DE CONSUMO
+
+ -Suporte para erros individuais
+ -Report mensal
+ -Alertas
+ ----------------------------------------------------------------------------------------------------
+ GERANDO LOGS EM ARQUIVOS
+
+ *Dificies de analisar
+ *Precisam ser juntados caso exista diferentes servidores  de aplicação
+ *Sem interface para pesquisa ou exploração
+ *São bons apenas para desenvolvimento inicial
+
+ SERILOG SYNKS
+ ->provedores para envio de dados do log
+ https://github.com/serilog/serilog/wiki/Provided-Sinks
+
+ ->SEQ
+ docker pull datalust/seq
+ executar
+ docker run --name seq -d --restart unless-stopped -e ACCEPT_EULA=Y -p 5341:80 datalust/seq:latest
+
+ ------------------------------------------------------------------------------------------------
+    PACOTES DO SERILOG
+
+    serilog.aspnetcore
+    serilog.settings.configuration
+    serilog.sinksFile
+
+------------------------------------------------------------------------------------------------
+    app settings do serilog
+     "Serilog": {
+    "MinimumLevel": {
+      "Default": "Debug",
+      "Override": {
+        "Microsoft": "Information",
+        "System": "Warning"
+      }
+    }
+
+
+ (SERILOG)
+ classe Program
+
+ //declarando o Configuration
+
+  public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile(path: "appSettings.json", optional: false, reloadOnChange: true)
+            .AddEnvironmentVariables()
+            .Build();
+
+ ///configuração da escrita de log em arquivos
+            Log.Logger = new LoggerConfiguration()
+                 .ReadFrom.Configuration(Configuration)
+                 .WriteTo.File(new JsonFormatter(), @"c:\devs\log-app.json", shared: true)
+                 .CreateLogger();
+            try
+            {
+                Log.Information(messageTemplate: "Inializando novo Host");
+                CreateHostBuilder(args).Build().Run();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, messageTemplate: "Problemas no host");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
+
+             public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>()
+                    .UseSerilog();
+                });
+----------------------------------------------------------------------------------------------------
+STACK ELK (NLOG ,ELASTIC SEARCH , LOGSTASH E KIBANA)
+
+PACOTES
+
+Nlog.Targets.ElasticSearch
+Nlog.Web.AspnetCore
+
+Elk imagem docker
+docker pull sebp/elk
+
+docker run -p 5601:5601 -p 9200:9200 -p 5044:5044 --name elk sebp/elk
+
+appsetings.json
+
+"Logging":{
+  "LogLevel":{
+    "Default":"Information",
+    "System":"Warning",
+    "Microsoft.AspnetCore":"Warning"
+  }
+},
+"AllowedHosts":"*"
+
